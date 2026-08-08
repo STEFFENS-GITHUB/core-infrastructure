@@ -10,7 +10,7 @@ provider "aws" {
 
 terraform {
   backend "s3" {
-    bucket       = "dev-terraform-state-476140239102"
+    bucket       = "dev-terraform-state-476140239102" # Review when I learn workspaces
     key          = "backend/bootstrap/terraform.tfstate"
     region       = "us-east-1"
     use_lockfile = true
