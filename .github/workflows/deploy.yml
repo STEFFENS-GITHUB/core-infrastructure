@@ -1,6 +1,7 @@
 name: Core Infrastructure
 on:
   push:
+  pull_request:
   workflow_dispatch:
     inputs:
       environment:
@@ -18,6 +19,8 @@ permissions: # Investigate this blocks purpose with OIDC
 jobs:
   plan:
     runs-on: ubuntu-latest
+    environment: ${{ inputs.environment || 'development' }} # Scopes vars only, not a gate
+
     steps:
     - name: Checkout git repository
       uses: actions/checkout@v6
@@ -25,7 +28,7 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v6
       with:
-        role-to-assume: arn:aws:iam::476140239102:role/infra-deploy # Is this dev role manually made? OR where? investigate
+        role-to-assume: ${{ vars.TERRAFORM_CI_ROLE_ARN }}
         aws-region: us-east-1
 
     - name: Setup Terraform
@@ -52,7 +55,8 @@ jobs:
   apply:
     runs-on: ubuntu-latest
     needs: plan
-    environment: development # Gate: protection rules live in repo settings
+    environment: ${{ inputs.environment || 'development' }} # Scopes vars only, not a gate
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
 
     steps:
     - name: Checkout git repository
@@ -61,7 +65,7 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v6
       with:
-        role-to-assume: arn:aws:iam::476140239102:role/infra-deploy
+        role-to-assume: ${{ vars.TERRAFORM_CI_ROLE_ARN }}
         aws-region: us-east-1
 
     - name: Setup Terraform
