@@ -1,2 +1,2 @@
 domain_name="steffenaws.com"
-env="dev"
+env="development"
