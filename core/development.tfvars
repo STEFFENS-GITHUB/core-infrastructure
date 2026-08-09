@@ -24,4 +24,4 @@ private_subnets = [
   }
 ]
 
-create_nat_gateway = true
+create_nat_gateway = false
