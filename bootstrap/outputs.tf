@@ -1,7 +1,9 @@
-output "env_hosted_zone_id" {
-    value = aws_route53_zone.env_hosted_zone.zone_id
+output "delegate_zone_id" {
+    description = "ID of the environment's delegated hosted zone"
+    value       = aws_route53_zone.delegate.zone_id
 }
 
-output "env_hosted_zone_name" {
-    value = aws_route53_zone.env_hosted_zone.name
+output "delegate_zone_name" {
+    description = "Name of the environment's delegated hosted zone"
+    value       = aws_route53_zone.delegate.name
 }

@@ -1,21 +1,21 @@
-data "aws_route53_zone" "root_hosted_zone" {
+data "aws_route53_zone" "root" {
   provider     = aws.root
   name         = "${var.domain_name}"
   private_zone = false
 }
 
-resource "aws_route53_zone" "env_hosted_zone" {
+resource "aws_route53_zone" "delegate" {
   name = "${var.env}.${var.domain_name}"
 }
 
-resource "aws_route53_record" "delegation_record" {
+resource "aws_route53_record" "delegate" {
   provider = aws.root
-  zone_id  = data.aws_route53_zone.root_hosted_zone.zone_id
+  zone_id  = data.aws_route53_zone.root.zone_id
   name     = "${var.env}.${var.domain_name}"
   type     = "NS"
   ttl      = 180
 
-  records = aws_route53_zone.env_hosted_zone.name_servers
+  records = aws_route53_zone.delegate.name_servers
 }
 
 resource "aws_iam_openid_connect_provider" "github" {

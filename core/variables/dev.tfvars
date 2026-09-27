@@ -1,5 +1,5 @@
 domain_name    = "steffenaws.com"
-env            = "development"
+env            = "dev"
 vpc_cidr_block = "192.168.0.0/16"
 
 public_subnets = [
